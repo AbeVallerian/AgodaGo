@@ -6,25 +6,22 @@ def generate_map(dest_city: str, n_locations: int):
     dest_coords = get_location_dict_from_city(dest_city, n_locations)
 
     city_map = folium.Map(
-        location=dest_coords[list(dest_coords.keys())[0]]["location"], zoom_start=13
+        location=dest_coords[list(dest_coords.keys())[0]]["location"], zoom_start=15
     )
 
     for destination, coords in dest_coords.items():
-        button = (
-            ""
-            if "agoda_url" not in coords.keys()
-            else f"""
-                    <a href="{coords['agoda_url']}"
+        print(coords["image_url"])
+        button = """
+                    <a>
                     <button type="button">Buy at Agoda</button>
                     </a>
                 """
-        )
         folium.Marker(
             location=coords["location"],
             popup=f"""
                 <div>
                 <span>{destination}</span>
-                <img src="{coords["image_url"]}" width="230" height="172">
+                <img src="{coords['image_url']}" width="230" height="172">
                 <br/>
                 {button}
                 </div>
