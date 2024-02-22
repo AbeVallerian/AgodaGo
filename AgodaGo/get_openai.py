@@ -3,12 +3,13 @@ import json
 import os
 
 import openai
+import requests
 
 client = openai.OpenAI(
     api_key="sk-ssot-ds-hackathon", base_url="https://openai-proxy.agoda.is/v1"
 )
 city_name = "Bangkok"
-n_locations = 3
+n_locations = 5
 
 ld = [
     {
@@ -39,13 +40,14 @@ get_locations_spec = {
 }
 
 
-def get_image(location_name):
+def get_image(
+    location_name: str, cache_dir: str = "/Users/avallerian/GitRepo/AgodaGo/AgodaGo"
+):
     prompt = f"Show me a representative picture of {location_name} in {city_name} that motivates tourists to visit the place."
     prompt_hash = hashlib.sha1(prompt.encode()).hexdigest()
-    cache_path = f"openai_cache/{prompt_hash}.txt"
+    cache_path = f"{cache_dir}/openai_cache/{prompt_hash}.png"
     if os.path.isfile(cache_path):
-        with open(cache_path, "r") as f:
-            image_url = f.read()
+        return cache_path
     else:
         response = client.images.generate(
             model="dall-e-3",
@@ -55,12 +57,13 @@ def get_image(location_name):
             n=1,
         )
         image_url = response.data[0].url
-        with open(cache_path, "w") as f:
-            f.write(image_url)
-    return image_url
+        image_data = requests.get(image_url).content
+        with open(cache_path, "wb") as f:
+            f.write(image_data)
+    return cache_path
 
 
-def get_location_dict_from_city(city_name, n_locations=3):
+def get_location_dict_from_city(city_name, n_locations=n_locations):
     # Get locations
     prompt = f"Give me {n_locations} tourist location in {city_name} that are in walking distance within each other"
     prompt_hash = hashlib.sha1(prompt.encode()).hexdigest()

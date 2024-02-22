@@ -2,8 +2,8 @@ import folium
 from get_openai import get_location_dict_from_city
 
 
-def generate_map(dest_city: str):
-    dest_coords = get_location_dict_from_city(dest_city)
+def generate_map(dest_city: str, n_locations: int):
+    dest_coords = get_location_dict_from_city(dest_city, n_locations)
 
     city_map = folium.Map(
         location=dest_coords[list(dest_coords.keys())[0]]["location"], zoom_start=13
@@ -31,7 +31,7 @@ def generate_map(dest_city: str):
             """,
             tooltip=destination,
             icon=folium.features.CustomIcon(
-                "https://drive.google.com/file/d/13A46gjJnTRuZtccH5yf6zbCwa0mZP_e5/view?usp=drive_link",
+                "https://agoda.sharepoint.com/:i:/r/sites/Agoda/Office%20templates/04%20Agoji%20Library/Agojiusingbinocular.png?csf=1&web=1&e=iedfFB",
                 icon_size=(50, 50),
             ),
         ).add_to(city_map)
