@@ -1,11 +1,8 @@
 import folium
 import streamlit as st
-from streamlit_folium import st_folium
-
-st.write("""Travel the world with Agoda""")
 
 DESTINATION = {
-    "Bangkok": {
+    "bangkok": {
         "The Grand Palace": {
             "location": [13.7500, 100.4913],
             "url": "https://gpt-vision-image-bucket.s3.ap-southeast-1.amazonaws.com/dall_e/d7fd6704-a333-4436-a8a4-7ca51d7d35c5",
@@ -32,7 +29,7 @@ DESTINATION = {
 }
 
 
-def generate_map(dest_city, dest_coords):
+def generate_map(dest_city: str, dest_coords=DESTINATION):
     city_map = folium.Map(
         location=dest_coords[dest_city]["The Grand Palace"]["location"], zoom_start=13
     )
@@ -66,9 +63,3 @@ def generate_map(dest_city, dest_coords):
 
     # Return the map object
     return city_map
-
-    # if __name__ == "main":
-
-
-map = generate_map("Bangkok", DESTINATION)
-st_folium(map, width=725)
