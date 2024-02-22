@@ -60,9 +60,9 @@ def get_image(location_name):
     return image_url
 
 
-def get_location_dict_from_city(city_name="Bangkok", n_locations=3):
+def get_location_dict_from_city(city_name, n_locations=3):
     # Get locations
-    prompt = f"Give me {n_locations} tourist location in Bangkok that are in walking distance within each other"
+    prompt = f"Give me {n_locations} tourist location in {city_name} that are in walking distance within each other"
     prompt_hash = hashlib.sha1(prompt.encode()).hexdigest()
     cache_path = f"openai_cache/{prompt_hash}.txt"
     if os.path.isfile(cache_path):

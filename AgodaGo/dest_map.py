@@ -36,7 +36,7 @@ def generate_map(dest_city: str):
             ),
         ).add_to(city_map)
 
-    return city_map
+    return city_map, dest_coords
 
 
 # def get_locations(dest_city: str, dest_coords=DESTINATION):
