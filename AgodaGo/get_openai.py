@@ -4,12 +4,13 @@ import os
 
 import openai
 import requests
+from PIL import Image
 
 client = openai.OpenAI(
     api_key="sk-ssot-ds-hackathon", base_url="https://openai-proxy.agoda.is/v1"
 )
-city_name = "Bangkok"
-n_locations = 5
+city_name: str = "Bangkok"
+n_locations: int = 5
 
 ld = [
     {
@@ -41,12 +42,13 @@ get_locations_spec = {
 
 
 def get_image(
-    location_name: str, cache_dir: str = "/Users/avallerian/GitRepo/AgodaGo/AgodaGo"
+    location_name: str,
+    cache_dir: str = "/Users/avallerian/.pyenv/versions/3.8.6/lib/python3.8/site-packages/streamlit_folium/frontend/build",
 ):
     prompt = f"Show me a representative picture of {location_name} in {city_name} that motivates tourists to visit the place."
     prompt_hash = hashlib.sha1(prompt.encode()).hexdigest()
-    cache_path = f"{cache_dir}/openai_cache/{prompt_hash}.png"
-    if os.path.isfile(cache_path):
+    cache_path = f"openai_cache/{prompt_hash}.png"
+    if os.path.isfile(f"{cache_dir}/{cache_path}"):
         return cache_path
     else:
         response = client.images.generate(
@@ -58,7 +60,9 @@ def get_image(
         )
         image_url = response.data[0].url
         image_data = requests.get(image_url).content
-        with open(cache_path, "wb") as f:
+        with open(f"{cache_dir}/{cache_path}", "wb") as f:
+            f.write(image_data)
+        with open(f"/Users/avallerian/GitRepo/AgodaGo/AgodaGo/{cache_path}", "wb") as f:
             f.write(image_data)
     return cache_path
 
@@ -99,3 +103,15 @@ def get_location_dict_from_city(city_name, n_locations=n_locations):
         locations[location_name]["image_url"] = image_url
 
     return locations
+
+
+def overlay_images(
+    background_path: str,
+    image_path: str,
+    output_path: str,
+):
+    background = Image.open(background_path)
+    image = Image.open(image_path)
+
+    background.paste(image, (0, 0), image)
+    background.save(output_path)

@@ -2,6 +2,7 @@
 __pycache__/
 AgodaGo/images
 AgodaGo/openai_cache
+AgodaGo/overlay_images
 *.py[cod]
 *$py.class
 
